@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#030407">
+<title>For Habiba — A Little Universe in Bloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--ink:#f4f0f5;--muted:#9795a6;--line:rgba(255,255,255,.13);--glass:rgba(9,10,17,.68)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030407;color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+canvas{display:block;position:fixed;inset:0;outline:none}
+.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 47%,transparent 20%,rgba(1,2,6,.28) 67%,rgba(1,2,6,.86) 115%);z-index:1}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E")}
+.ui{position:fixed;inset:0;z-index:3;pointer-events:none}.topbar{position:absolute;left:clamp(20px,4vw,58px);right:clamp(20px,4vw,58px);top:28px;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:11px;font-size:12px;letter-spacing:.24em;font-weight:600;text-transform:uppercase}.brand-mark{width:27px;height:27px;border:1px solid rgba(255,255,255,.45);border-radius:50%;display:grid;place-items:center;color:#f7b5d1;font-size:16px;box-shadow:0 0 22px #e35d9928}
+.status{font:10px 'DM Mono',monospace;letter-spacing:.13em;color:#c4c0ce;display:flex;align-items:center;gap:9px}.dot{width:5px;height:5px;border-radius:50%;background:#a8f4c2;box-shadow:0 0 10px #a8f4c2}
+.hero{position:absolute;top:clamp(100px,16vh,160px);left:50%;transform:translateX(-50%);text-align:center;width:min(700px,90vw);text-shadow:0 2px 30px #000}
+.eyebrow{font:10px 'DM Mono',monospace;letter-spacing:.32em;text-transform:uppercase;color:#d4a4bc;margin-bottom:17px}
+h1{font-size:clamp(34px,5.4vw,67px);font-weight:300;letter-spacing:-.055em;line-height:1.02;margin:0}h1 em{font-family:Georgia,serif;font-weight:400;color:#efb3cf}
+.sub{font-size:12px;line-height:1.8;color:#aaa7b6;letter-spacing:.03em;margin:18px auto 0;max-width:380px}
+.bottom{position:absolute;bottom:clamp(20px,4vh,42px);left:50%;transform:translateX(-50%);width:min(580px,calc(100vw - 32px));pointer-events:auto}
+.panel{background:linear-gradient(135deg,rgba(19,19,29,.82),rgba(8,9,15,.72));border:1px solid var(--line);border-radius:17px;padding:16px 18px 14px;backdrop-filter:blur(18px);box-shadow:0 18px 80px #0005}
+.progress-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font:10px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#b9b6c5}.percent{color:#f3c2d8}
+.track{height:2px;background:#ffffff17;overflow:hidden;border-radius:5px}.fill{height:100%;width:0%;background:linear-gradient(90deg,#a4e8bf,#f5b5d3,#fff0c5);box-shadow:0 0 14px #f0a8d1;transition:width .12s linear}
+.controls{display:flex;align-items:center;gap:10px;margin-top:15px}.btn{border:1px solid #ffffff24;background:#ffffff08;color:#f5f0f5;border-radius:9px;padding:10px 13px;font:10px 'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background .2s,border-color .2s;white-space:nowrap}.btn:hover{background:#ffffff16;border-color:#ffffff55}.btn.primary{background:#f0b7d0;color:#21131b;border-color:#f0b7d0;font-weight:500}.btn.primary:hover{background:#ffd4e5}.btn:focus-visible,input:focus-visible{outline:2px solid #f0b7d0;outline-offset:3px}
+.speed{display:flex;align-items:center;gap:10px;margin-left:auto;color:#aaa6b7;font:9px 'DM Mono',monospace;letter-spacing:.09em;white-space:nowrap}.speed input{width:94px;accent-color:#f0b7d0;cursor:pointer}.speed-val{width:28px;color:#f1c4d8}
+.footer{position:absolute;left:clamp(20px,4vw,58px);bottom:36px;font:9px 'DM Mono',monospace;letter-spacing:.14em;color:#716e7d;text-transform:uppercase}.hint{position:absolute;right:clamp(20px,4vw,58px);bottom:36px;font:9px 'DM Mono',monospace;letter-spacing:.1em;color:#716e7d;text-transform:uppercase;text-align:right}
+@media(max-width:600px){.topbar{top:18px}.status{font-size:8px}.hero{top:15vh}.sub{font-size:11px;max-width:300px}.bottom{bottom:15px}.panel{padding:13px}.controls{gap:7px;flex-wrap:wrap}.btn{padding:10px 11px;font-size:9px}.speed{order:3;width:100%;margin:5px 0 0;justify-content:flex-end}.speed input{width:120px}.footer,.hint{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="vignette"></div><div class="grain"></div>
+<div class="ui">
+  <div class="topbar"><div class="brand"><span class="brand-mark">✳</span> FOR HABIBA ♡</div><div class="status"><span class="dot"></span><span id="stateLabel">MADE JUST FOR HABIBA</span></div></div>
+  <header class="hero"><div class="eyebrow">MADE JUST FOR YOU</div><h1>For <em>Habiba.</em></h1><p class="sub">A little universe of light, growing flower by flower — just to make you smile.</p></header>
+  <div class="bottom"><div class="panel">
+    <div class="progress-head"><span id="phaseLabel">SEEDING THE NIGHT</span><span class="percent" id="percent">00%</span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="controls"><button class="btn primary" id="replay">↻ &nbsp; Replay bloom</button><button class="btn" id="pause">Ⅱ &nbsp; Pause</button><div class="speed"><label for="speed">GROWTH SPEED</label><input id="speed" type="range" min=".4" max="2" step=".1" value="1"><span class="speed-val" id="speedVal">1.0×</span></div></div>
+  </div></div>
+  <div class="footer">A LITTLE GIFT, MADE OF LIGHT</div><div class="hint">MOVE YOUR CURSOR<br>AND TOUCH THE MAGIC</div>
+</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x030407, 0.018);
+const camera = new THREE.PerspectiveCamera(43, innerWidth/innerHeight, .1, 100);
+camera.position.set(0, 0.2, 16);
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:false, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0x030407,1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.3;
+document.body.prepend(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0x8c91b8, .65));
+const keyLight = new THREE.PointLight(0xffc6dc, 24, 28); keyLight.position.set(-2,5,7); scene.add(keyLight);
+const rimLight = new THREE.PointLight(0x8a9dff, 15, 25); rimLight.position.set(5,1,-3); scene.add(rimLight);
+
+let seed=7219; function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+function range(a,b){return a+(b-a)*rand()}
+const bouquets = new THREE.Group(); scene.add(bouquets);
+const starGeo = new THREE.BufferGeometry(), starPos=[], starSizes=[], starColors=[];
+for(let i=0;i<1500;i++){starPos.push(range(-19,19),range(-12,12),range(-15,-2));starSizes.push(range(.35,1.8));let c=new THREE.Color().setHSL(range(.52,.72),range(.12,.6),range(.55,1));starColors.push(c.r,c.g,c.b)}
+starGeo.setAttribute('position',new THREE.Float32BufferAttribute(starPos,3));
+starGeo.setAttribute('aSize',new THREE.Float32BufferAttribute(starSizes,1));
+starGeo.setAttribute('color',new THREE.Float32BufferAttribute(starColors,3));
+const starMat=new THREE.PointsMaterial({size:.035,vertexColors:true,transparent:true,opacity:.8,depthWrite:false,blending:THREE.AdditiveBlending});
+const stars=new THREE.Points(starGeo,starMat);scene.add(stars);
+
+const flowerSpecs=[
+ {x:-4.0,y:1.15,z:.3,r:1.28,petals:8,color:0xff416f,inner:0xffc1d1,seed:11},
+ {x:-2.45,y:2.2,z:-.8,r:.92,petals:7,color:0xe8a6ff,inner:0xffe5f2,seed:24},
+ {x:-.85,y:1.65,z:.45,r:1.34,petals:9,color:0xffd1df,inner:0xffffff,seed:39},
+ {x:1.05,y:2.45,z:-.9,r:.95,petals:8,color:0xffc84f,inner:0xfff0ae,seed:47},
+ {x:3.0,y:1.7,z:.1,r:1.3,petals:9,color:0xc17aff,inner:0xf2c8ff,seed:53},
+ {x:4.15,y:.75,z:-.7,r:.88,petals:7,color:0xff658d,inner:0xffd6e3,seed:67},
+ {x:-2.7,y:.15,z:1.2,r:.72,petals:7,color:0xffc04c,inner:0xfff1ad,seed:78},
+ {x:.0,y:.25,z:1.45,r:.82,petals:8,color:0xf34d82,inner:0xffb7ce,seed:89},
+ {x:2.4,y:.1,z:1.0,r:.75,petals:8,color:0xfff0e6,inner:0xffffff,seed:91}
+];
+const totalDuration=26; let elapsed=0, paused=false, speed=1, last=performance.now();
+const particleSystems=[];
+function makeParticles(points, color, size, glow=true){
+ const geo=new THREE.BufferGeometry(), positions=new Float32Array(points.length*3), targets=new Float32Array(points.length*3), colors=new Float32Array(points.length*3), sizes=new Float32Array(points.length);
+ const c=new THREE.Color(color);
+ points.forEach((p,i)=>{let k=i*3;targets[k]=p[0];targets[k+1]=p[1];targets[k+2]=p[2];positions[k]=p[0]+range(-5,5);positions[k+1]=range(-7,7);positions[k+2]=p[2]+range(-4,4);let cc=c.clone().multiplyScalar(range(.72,1.28));colors[k]=cc.r;colors[k+1]=cc.g;colors[k+2]=cc.b;sizes[i]=range(.55,1.5)});
+ geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('aTarget',new THREE.BufferAttribute(targets,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));geo.setAttribute('aSize',new THREE.BufferAttribute(sizes,1));
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,vertexColors:true,blending:THREE.AdditiveBlending,uniforms:{uProgress:{value:0},uSize:{value:size},uTime:{value:0},uMouse:{value:new THREE.Vector3(100,100,100)},uInteractive:{value:1}},vertexShader:`
+ attribute vec3 aTarget; attribute float aSize; uniform float uProgress; uniform float uSize; uniform float uTime; uniform vec3 uMouse; uniform float uInteractive; varying vec3 vColor; varying float vAlpha;
+ void main(){float p=clamp(uProgress,0.,1.);float eased=p*p*(3.-2.*p);vec3 pos=mix(position,aTarget,eased);float flutter=sin(uTime*1.2+aTarget.x*2.3+aTarget.y*1.7)*.025*p;pos.x+=flutter;pos.y+=cos(uTime*.9+aTarget.x)*.018*p;
+ vec3 d=pos-uMouse;float dist=length(d);if(dist<2.1){float force=(1.-dist/2.1)*uInteractive;pos+=normalize(d+vec3(.001)) * force*.55;}
+ vec4 mv=modelViewMatrix*vec4(pos,1.);gl_Position=projectionMatrix*mv;gl_PointSize=uSize*aSize*(220./-mv.z);vColor=color;vAlpha=smoothstep(0.,.15,p)*(.72+.28*sin(uTime*2.5+aTarget.x*8.));}`,
+ fragmentShader:`varying vec3 vColor;varying float vAlpha;void main(){vec2 q=gl_PointCoord-.5;float d=length(q);if(d>.5)discard;float a=exp(-d*17.)*.9+smoothstep(.5,.05,d)*.12;gl_FragColor=vec4(vColor,a*vAlpha);}`});
+ const obj=new THREE.Points(geo,mat);bouquets.add(obj);particleSystems.push({obj,mat,geo});return obj;
+}
+// Build each bloom from a mathematical rose-like petal surface, sampled as glowing particles.
+flowerSpecs.forEach((f,fi)=>{
+ seed=f.seed; const pts=[], petalCount=2100, stemPts=[];
+ for(let i=0;i<petalCount;i++){
+   const petal=Math.floor(rand()*f.petals), u=rand(), v=rand();
+   const theta=petal/f.petals*Math.PI*2+(u-.5)*.78;
+   const rr=f.r*Math.sqrt(u);
+   const lobed=Math.sin(Math.PI*Math.pow(u,.72));
+   const radial=rr*(.28+.82*lobed);
+   const x=f.x+Math.cos(theta)*radial;
+   const y=f.y+Math.sin(theta)*radial*.77 + Math.sin(u*Math.PI)*.14;
+   const z=f.z + Math.cos(theta*2.0)*.20 + (v-.5)*.23 + (1-u)*.12;
+   const colMix=Math.pow(rand(),2);
+   const col=new THREE.Color(f.color).lerp(new THREE.Color(f.inner),colMix*.6);
+   pts.push([x+range(-.025,.025),y+range(-.025,.025),z+range(-.025,.025),col]);
+ }
+ // Override colors per point for rich petal gradients
+ const bloom=makeParticles(pts.map(p=>p.slice(0,3)),f.color,1.05);
+ const attrs=bloom.geometry.attributes.color;
+ pts.forEach((p,i)=>{let c=p[3];attrs.array[i*3]=c.r;attrs.array[i*3+1]=c.g;attrs.array[i*3+2]=c.b});attrs.needsUpdate=true;
+ // Center pollen cluster
+ const center=[];for(let i=0;i<280;i++){let a=rand()*Math.PI*2,r=Math.sqrt(rand())*f.r*.22;center.push([f.x+Math.cos(a)*r,f.y+Math.sin(a)*r*.8,f.z+.2+range(-.08,.12)])}
+ makeParticles(center, f.inner, .95);
+ // Curved stem, formed from green particles; every bloom grows from a slightly different base.
+ const stem=[];let baseX=f.x*.72, baseY=-5.5+range(-.2,.25), topY=f.y-.25;
+ for(let i=0;i<620;i++){let t=rand(),a=rand()*Math.PI*2,rad=range(.005,.045),y=baseY+(topY-baseY)*t,x=baseX+(f.x-baseX)*t+Math.sin(t*Math.PI)*.22*Math.sin(fi);stem.push([x+Math.cos(a)*rad,y,f.z+Math.sin(a)*rad])}
+ makeParticles(stem,0x53bd85,.82);
+ // Leaves as narrow curved surfaces, generated mathematically.
+ for(let side of [-1,1]){
+   const leaf=[];let lx=baseX+(f.x-baseX)*.48,ly=baseY+(topY-baseY)*.48;
+   for(let i=0;i<360;i++){let t=rand(),w=(Math.sin(Math.PI*t)*.42),edge=rand()*2-1;leaf.push([lx+side*t*.85+edge*w,ly+t*.45+Math.sin(t*Math.PI)*.17,f.z+.03+edge*.04])}
+   makeParticles(leaf,side===1?0x56c88b:0x2d9468,.72);
+ }
+});
+// Add a few drifting pollen motes near the bouquet
+const motes=[];for(let i=0;i<250;i++)motes.push([range(-6,6),range(-4,5),range(-1,3)]);
+makeParticles(motes,0xffd9ec,.55);
+
+const raycaster=new THREE.Raycaster(), mouseNdc=new THREE.Vector2(9,9), mouseWorld=new THREE.Vector3(100,100,100);
+window.addEventListener('pointermove',e=>{mouseNdc.x=e.clientX/innerWidth*2-1;mouseNdc.y=-(e.clientY/innerHeight)*2+1;raycaster.setFromCamera(mouseNdc,camera);const plane=new THREE.Plane(new THREE.Vector3(0,0,1),0);raycaster.ray.intersectPlane(plane,mouseWorld)});
+window.addEventListener('pointerleave',()=>mouseWorld.set(100,100,100));
+const fill=document.getElementById('fill'),percent=document.getElementById('percent'),phase=document.getElementById('phaseLabel'),stateLabel=document.getElementById('stateLabel'),pauseBtn=document.getElementById('pause'),speedInput=document.getElementById('speed'),speedVal=document.getElementById('speedVal');
+function replay(){elapsed=0;paused=false;pauseBtn.textContent='Ⅱ  Pause';stateLabel.textContent='MADE JUST FOR HABIBA'}
+document.getElementById('replay').addEventListener('click',replay);
+pauseBtn.addEventListener('click',()=>{paused=!paused;pauseBtn.textContent=paused?'▶  Resume':'Ⅱ  Pause';stateLabel.textContent=paused?'TIME SUSPENDED':elapsed>=totalDuration?'BLOOMING FOR HABIBA':'MADE JUST FOR HABIBA'});
+speedInput.addEventListener('input',()=>{speed=Number(speedInput.value);speedVal.textContent=speed.toFixed(1)+'×'});
+const clock=new THREE.Clock();
+function animate(now){
+ requestAnimationFrame(animate);const dt=Math.min((now-last)/1000,.05);last=now;if(!paused)elapsed=Math.min(totalDuration,elapsed+dt*speed);
+ const p=elapsed/totalDuration;fill.style.width=(p*100).toFixed(1)+'%';percent.textContent=Math.round(p*100).toString().padStart(2,'0')+'%';
+ phase.textContent=p<.12?'SEEDING THE NIGHT':p<.38?'STEMS & LEAVES EMERGING':p<.72?'PETALS FINDING THEIR SHAPE':p<1?'GATHERING THE LIGHT':'A LITTLE MAGIC, JUST FOR YOU';
+ if(p>=1&&!paused)stateLabel.textContent='BLOOMING FOR HABIBA';
+ particleSystems.forEach((s,i)=>{let offset=(i<flowerSpecs.length?i*.045:i<flowerSpecs.length*4?.05:0);s.mat.uniforms.uProgress.value=THREE.MathUtils.clamp((p-offset)/.72,0,1);s.mat.uniforms.uTime.value=now*.001;s.mat.uniforms.uMouse.value.copy(mouseWorld);});
+ stars.rotation.y=Math.sin(now*.00008)*.035;stars.rotation.x=Math.cos(now*.00007)*.018;
+ bouquets.rotation.y=Math.sin(now*.00022)*.035;bouquets.rotation.x=Math.sin(now*.00018)*.012;
+ keyLight.intensity=24+Math.sin(now*.0011)*2;renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+function resize(){camera.aspect=innerWidth/innerHeight;camera.position.z=innerWidth<600?19:16;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))}
+window.addEventListener('resize',resize);
+</script>
+</body>
+</html>
